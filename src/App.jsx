@@ -23,13 +23,28 @@ const exportImage =
 const hospitalImage =
   "https://images.unsplash.com/photo-1519494140681-8b17d830a3e9?auto=format&fit=crop&w=1500&q=85";
 
+const basePath = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
+
+function withBasePath(path) {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return `${basePath}${normalizedPath === "/" ? "/" : normalizedPath}`;
+}
+
+function getCurrentRoute() {
+  let pathname = window.location.pathname;
+  if (basePath && pathname.startsWith(basePath)) {
+    pathname = pathname.slice(basePath.length) || "/";
+  }
+  return pathname.replace(/\/$/, "") || "/";
+}
+
 function Header() {
   const [open, setOpen] = useState(false);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/50 bg-white/90 backdrop-blur-xl">
       <div className="container-page flex h-20 items-center justify-between">
-        <a href="/" className="flex items-center gap-3" aria-label="DIALYATECH home">
+        <a href={withBasePath("/")} className="flex items-center gap-3" aria-label="DIALYATECH home">
           <div className="flex h-11 w-11 items-center justify-center rounded-md bg-medical-600 text-white shadow-glow">
             <span className="text-lg font-black">D</span>
           </div>
@@ -45,7 +60,7 @@ function Header() {
           {navLinks.map((link) => (
             <a
               key={link.href}
-              href={link.href}
+              href={withBasePath(link.href)}
               className="text-sm font-semibold text-slate-600 transition hover:text-medical-700"
             >
               {link.label}
@@ -53,7 +68,7 @@ function Header() {
           ))}
         </nav>
 
-        <a className="btn-primary hidden xl:inline-flex" href="/request-quotation">
+        <a className="btn-primary hidden xl:inline-flex" href={withBasePath("/request-quotation")}>
           Request Quotation <ArrowRight size={16} />
         </a>
 
@@ -73,7 +88,7 @@ function Header() {
             {navLinks.map((link) => (
               <a
                 key={link.href}
-                href={link.href}
+                href={withBasePath(link.href)}
                 className="rounded-md px-3 py-3 text-sm font-semibold text-slate-700 hover:bg-medical-50"
                 onClick={() => setOpen(false)}
               >
@@ -117,10 +132,10 @@ function Hero() {
             and international healthcare markets.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <a href="/products" className="btn-primary">
+            <a href={withBasePath("/products")} className="btn-primary">
               View Products <ArrowRight size={18} />
             </a>
-            <a href="/request-quotation" className="btn-secondary border-white/20 bg-white/95">
+            <a href={withBasePath("/request-quotation")} className="btn-secondary border-white/20 bg-white/95">
               Request Quotation <Send size={18} />
             </a>
           </div>
@@ -250,10 +265,10 @@ function Products() {
                 <h3 className="mt-4 text-xl font-black text-navy-900">{product.name}</h3>
                 <p className="mt-3 min-h-20 text-sm leading-7 text-slate-600">{product.description}</p>
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                  <a href="/request-quotation#export-quote" className="btn-primary px-3 py-2 text-xs">
+                  <a href={withBasePath("/request-quotation#export-quote")} className="btn-primary px-3 py-2 text-xs">
                     Export Quotation
                   </a>
-                  <a href="/request-quotation#domestic-quote" className="btn-secondary px-3 py-2 text-xs">
+                  <a href={withBasePath("/request-quotation#domestic-quote")} className="btn-secondary px-3 py-2 text-xs">
                     Domestic Quotation
                   </a>
                 </div>
@@ -649,16 +664,16 @@ function Footer() {
         <div>
           <p className="font-bold">Business</p>
           <div className="mt-4 grid gap-2 text-sm text-slate-300">
-            <a href="/export-business" className="hover:text-white">Export Business</a>
-            <a href="/domestic-business" className="hover:text-white">Domestic Business</a>
-            <a href="/request-quotation" className="hover:text-white">Request Quotation</a>
+            <a href={withBasePath("/export-business")} className="hover:text-white">Export Business</a>
+            <a href={withBasePath("/domestic-business")} className="hover:text-white">Domestic Business</a>
+            <a href={withBasePath("/request-quotation")} className="hover:text-white">Request Quotation</a>
           </div>
         </div>
         <div>
           <p className="font-bold">Products</p>
           <div className="mt-4 grid gap-2 text-sm text-slate-300">
             {categories.slice(0, 4).map((category) => (
-              <a key={category} href="/products" className="hover:text-white">{category}</a>
+              <a key={category} href={withBasePath("/products")} className="hover:text-white">{category}</a>
             ))}
           </div>
         </div>
@@ -666,7 +681,7 @@ function Footer() {
       <div className="border-t border-white/10 py-5">
         <div className="container-page flex flex-col gap-2 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 {company.legalName}. All rights reserved.</p>
-          <a href="/" className="inline-flex items-center gap-2 hover:text-white">
+          <a href={withBasePath("/")} className="inline-flex items-center gap-2 hover:text-white">
             Back to top <ChevronDown className="rotate-180" size={16} />
           </a>
         </div>
@@ -676,7 +691,7 @@ function Footer() {
 }
 
 export default function App() {
-  const route = window.location.pathname.replace(/\/$/, "") || "/";
+  const route = getCurrentRoute();
   const routes = {
     "/": (
       <>
