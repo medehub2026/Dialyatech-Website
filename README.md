@@ -20,6 +20,9 @@ Production-ready React + Tailwind CSS website for **DIALYATECH HEALTH SERVICE PV
 - `/domestic-business` - Domestic Business
 - `/request-quotation` - Export and domestic quotation forms
 - `/contact` - Contact details, WhatsApp, enquiry form, and map placeholder
+- `/login` - Customer login and admin login selection
+- `/customer` - Customer portal for procurement actions and quotation request visibility
+- `/admin` - Admin control center for product, quotation, content, logo, image, and contact settings
 
 ## Local Development
 
@@ -55,6 +58,20 @@ The export quotation, domestic quotation, and contact forms currently validate o
 ```text
 src/App.jsx
 ```
+
+Submitted quotation requests and contact enquiries are saved in browser local storage for the frontend admin workflow.
+
+## Admin Control Center
+
+The admin area includes:
+
+- Product listing management with image, category, description, and market availability controls
+- Export and domestic quotation request review
+- Product quotation preparation and sent quotation records
+- Frontend settings for logo, company name, about content, contact details, and main website images
+- Customer login and customer portal routes
+
+The current login and admin authorization layer is frontend-ready for demonstration and UI workflow validation. For production security, connect `/login` and `/admin` to a backend authentication service before allowing real staff access.
 
 ## Deployment
 
